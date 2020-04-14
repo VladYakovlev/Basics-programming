@@ -33,5 +33,5 @@ BEGIN
         Sum := Sum + Digit;
       ReadDigit(INPUT, Digit);  
     END;
-  WRITELN('Сумма цифр: ', Sum); 
+  WRITELN('РЎСѓРјРјР° С†РёС„СЂ: ', Sum); 
 END.
