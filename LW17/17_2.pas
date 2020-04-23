@@ -1,24 +1,24 @@
 PROCEDURE ReadDigit(VAR F: TEXT; VAR D: INTEGER);
-VAR
-  Ch: CHAR;
-BEGIN{ReadDigit}
-  D := -1;
-  IF NOT EOLN(F)
-  THEN
-    BEGIN
-      READ(F ,Ch);
-      IF Ch = '0' THEN D := 0;
-      IF Ch = '1' THEN D := 1; 
-      IF Ch = '2' THEN D := 2;
-      IF Ch = '3' THEN D := 3;
-      IF Ch = '4' THEN D := 4;
-      IF Ch = '5' THEN D := 5;
-      IF Ch = '6' THEN D := 6;
-      IF Ch = '7' THEN D := 7;
-      IF Ch = '8' THEN D := 8;
-      IF Ch = '9' THEN D := 9 
-    END
-END;{ReadDigit}
+  VAR
+    Ch: CHAR;
+  BEGIN{ReadDigit}
+    D := -1;
+    IF NOT EOLN(F)
+    THEN
+      BEGIN
+        READ(F ,Ch);
+        IF Ch = '0' THEN D := 0;
+        IF Ch = '1' THEN D := 1; 
+        IF Ch = '2' THEN D := 2;
+        IF Ch = '3' THEN D := 3;
+        IF Ch = '4' THEN D := 4;
+        IF Ch = '5' THEN D := 5;
+        IF Ch = '6' THEN D := 6;
+        IF Ch = '7' THEN D := 7;
+        IF Ch = '8' THEN D := 8;
+        IF Ch = '9' THEN D := 9
+      END
+  END;{ReadDigit}
 PROCEDURE ReadNumber(VAR F: TEXT; VAR N: INTEGER);
 VAR
   Digit: INTEGER;
@@ -47,14 +47,13 @@ BEGIN{ReadNumber}
             END
         END;  
     END;
-  IF OverFlow = FALSE
+  IF OverFlow = TRUE
   THEN
-    WRITELN(N)
-  ELSE
-    WRITELN(-1);
+    N := -1
 END;{ReadNumber}
 VAR
   Number: INTEGER;
 BEGIN
-  ReadNumber(INPUT, Number)
+  ReadNumber(INPUT, Number);
+  WRITELN(Number)
 END.
