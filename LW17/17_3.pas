@@ -26,14 +26,10 @@ END;{ReadDigit}
 PROCEDURE ReadNumber(VAR InFile: TEXT; VAR Number: INTEGER);
 VAR
   Digit: INTEGER;
-  NumFile: TEXT;
-  OverFlow: BOOLEAN;
 BEGIN{ReadNumber}
   Number := 0;
-  OverFlow := FALSE;
   ReadDigit(InFile, Digit);
-  REWRITE(NumFile);
-  WHILE (Digit <> -1 ) AND ( NOT OverFlow)
+  WHILE (Digit <> -1 ) AND ( Number <> -1)
   DO
     BEGIN
       IF Digit <> -1 
@@ -41,69 +37,65 @@ BEGIN{ReadNumber}
         BEGIN
           IF (MAXINT DIV 10 < Number) OR (MAXINT DIV 10 = Number) AND (MAXINT MOD 10 < Digit)
           THEN
-            OverFlow := TRUE
+            Number := -1
           ELSE
             BEGIN
-              WRITE(NumFile, Digit);
-              RESET(NumFile);
-              READ(NumFile, Number);
-              ReadDigit(InFile, Digit);
-            END
-        END;
-      IF OverFlow = TRUE
-      THEN
-        Number := -1; 
+              Number := Number * 10;
+              Number := Number + Digit
+            END;
+          ReadDigit(InFile, Digit)
+        END; 
     END;
 END;{ReadNumber}
 BEGIN
-  ReadNumber(INPUT, Min);
-  IF Min = -1 
+  ReadNumber(INPUT, Number);
+  IF Number <> -1 
   THEN 
-    OverFlow := TRUE
-  ELSE
-    OverFlow := FALSE;
-  Max := Min;
-  Sum := Min;
-  Average := 0;
-  NumbersAmount := 1;
-  WHILE (NOT EOF(INPUT)) AND (OverFlow = FALSE)
-  DO
     BEGIN
-      ReadNumber(INPUT, Number);
-      IF Number = -1
-      THEN
-        OverFlow := TRUE;
-      IF (Sum > (MAXINT - Number))
-      THEN
-        OverFlow := TRUE
-      ELSE
-        Sum := Sum + Number;
+      Sum := Number;
+      Min := Number;
+      Max := Number;
+      OverFlow := FALSE;
+      NumbersAmount := 1;
+      WHILE (NOT EOLN(INPUT)) AND (OverFlow = FALSE)
+      DO
+        BEGIN
+          ReadNumber(INPUT, Number);
+          IF Number = -1
+          THEN
+            OverFlow := TRUE;
+          IF (Sum + Number >= MAXINT)
+          THEN
+            OverFlow := TRUE
+          ELSE
+            Sum := Sum + Number;
+          IF NOT OverFlow
+          THEN
+            BEGIN
+              IF Number < Min
+              THEN
+                Min := Number;
+              IF Number > Max
+              THEN
+                Max := Number
+            END;
+          NumbersAmount := NumbersAmount + 1;
+        END;
       IF NOT OverFlow
       THEN
         BEGIN
-          IF Number < Min
+          IF NumbersAmount <> 0 
           THEN
-            Min := Number;
-          IF Number > Max
-          THEN
-            Max := Number
-        END;
-      NumbersAmount := NumbersAmount + 1;
-    END;
-  IF NOT OverFlow
-  THEN
-    BEGIN
-      IF NumbersAmount <> 0 
-      THEN
-        BEGIN
-          WRITELN('Min: ', Min);
-          WRITELN('Max: ', Max);
-          WRITE('Average: ');
-          WRITELN(Sum DIV NumbersAmount, '.', Sum MOD NumbersAmount * 100 DIV NumbersAmount)
+            BEGIN
+              WRITELN('Min: ', Min);
+              WRITELN('Max: ', Max);
+              WRITE('Average: ');
+              WRITELN(Sum DIV NumbersAmount, '.', Sum MOD NumbersAmount * 100 DIV NumbersAmount)
+            END
+          ELSE
+            WRITELN('Empty File');
         END
       ELSE
-        WRITELN('Empty File');
-    END
-  ELSE
-    WRITELN('Overflow')
+        WRITELN('Overflow')
+    END;    
 END.
