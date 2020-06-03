@@ -1,4 +1,4 @@
-PROCEDURE ReadDigit(VAR InF: TEXT; VAR Digit: INTEGER);
+﻿PROCEDURE ReadDigit(VAR InF: TEXT; VAR Digit: INTEGER);
   VAR
     Ch: CHAR;
   BEGIN{ReadDigit}
@@ -28,19 +28,15 @@ BEGIN{ReadNumber}
   WHILE (Digit <> -1 ) AND (Number <> -1)
   DO
     BEGIN
-      IF Digit <> -1 
+      IF (MAXINT DIV 10 < Number) OR (MAXINT DIV 10 = Number) AND (MAXINT MOD 10 < Digit)
       THEN
+        Number := -1  
+      ELSE
         BEGIN
-          IF (MAXINT DIV 10 < Number) OR (MAXINT DIV 10 = Number) AND (MAXINT MOD 10 < Digit)
-          THEN
-            Number := -1  
-          ELSE
-            BEGIN
-              Number := Number * 10;
-              Number := Number + Digit;
-            END;
-          ReadDigiT(InF, Digit)     
-        END;  
+          Number := Number * 10;
+          Number := Number + Digit;
+        END;
+      ReadDigit(InF, Digit)  
     END;
 END;{ReadNumber}
 VAR

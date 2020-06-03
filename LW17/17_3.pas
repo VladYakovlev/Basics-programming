@@ -32,22 +32,18 @@ BEGIN{ReadNumber}
   WHILE (Digit <> -1 ) AND ( Number <> -1)
   DO
     BEGIN
-      IF Digit <> -1 
+      IF (MAXINT DIV 10 < Number) OR (MAXINT DIV 10 = Number) AND (MAXINT MOD 10 < Digit)
       THEN
+        Number := -1
+      ELSE
         BEGIN
-          IF (MAXINT DIV 10 < Number) OR (MAXINT DIV 10 = Number) AND (MAXINT MOD 10 < Digit)
-          THEN
-            Number := -1
-          ELSE
-            BEGIN
-              Number := Number * 10;
-              Number := Number + Digit
-            END;
-          ReadDigit(InFile, Digit)
-        END; 
+          Number := Number * 10;
+          Number := Number + Digit
+        END;
+      ReadDigit(InFile, Digit)
     END;
 END;{ReadNumber}
-BEGIN
+BEGIN{Stat}
   ReadNumber(INPUT, Number);
   IF Number <> -1 
   THEN 
@@ -61,25 +57,20 @@ BEGIN
       DO
         BEGIN
           ReadNumber(INPUT, Number);
-          IF Number = -1
-          THEN
-            OverFlow := TRUE;
-          IF (Sum + Number >= MAXINT)
-          THEN
-            OverFlow := TRUE
-          ELSE
-            Sum := Sum + Number;
-          IF NOT OverFlow
+          IF (Number  <= (MAXINT - Sum)) AND (Number <> -1)
           THEN
             BEGIN
+              Sum := Sum + Number;
+              NumbersAmount := NumbersAmount + 1;
               IF Number < Min
               THEN
                 Min := Number;
               IF Number > Max
               THEN
                 Max := Number
-            END;
-          NumbersAmount := NumbersAmount + 1;
+            END
+          ELSE
+            OverFlow := TRUE
         END;
       IF NOT OverFlow
       THEN
@@ -97,5 +88,7 @@ BEGIN
         END
       ELSE
         WRITELN('Overflow')
-    END;    
-END.
+    END
+  ELSE
+    WRITELN('Overflow')     
+END.{Stat}
