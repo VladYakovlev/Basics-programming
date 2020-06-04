@@ -53,7 +53,7 @@ BEGIN{Stat}
       Max := Number;
       OverFlow := FALSE;
       NumbersAmount := 1;
-      WHILE (NOT EOLN(INPUT)) AND (OverFlow = FALSE)
+      WHILE (NOT EOF(INPUT)) AND (OverFlow = FALSE)
       DO
         BEGIN
           ReadNumber(INPUT, Number);
