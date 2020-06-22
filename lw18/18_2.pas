@@ -21,9 +21,13 @@ BEGIN {AverageScore}
       TotalScore := 0;
       WhichScore := 1;
       REWRITE(SecondName);
-      READ(INPUT, Ch);
-      WRITE(SecondName, Ch);
-      WHILE (Ch <> ' ') 
+      IF NOT EOLN(INPUT)
+      THEN
+        BEGIN
+          READ(INPUT, Ch);
+          WRITE(SecondName, Ch)
+        END;
+      WHILE (Ch <> ' ') AND (NOT EOLN(INPUT))
       DO
         BEGIN
           READ(INPUT, Ch);
@@ -41,7 +45,7 @@ BEGIN {AverageScore}
             END
           ELSE
             BEGIN
-              WRITE('Ð’Ð²ÐµÐ´ÐµÐ½Ð¾Ðµ Ñ‡Ð¸ÑÐ»Ð¾ Ð½Ðµ Ð½Ð°Ñ…Ð¾Ð´Ð¸Ñ‚ÑÑ Ð² Ð´Ð¸Ð°Ð¿Ð¾Ð·Ð¾Ð½Ðµ Ð¾Ñ‚ 0 Ð´Ð¾ 100');
+              WRITE('Ââåäåíîå ÷èñëî íå âõîäèò â äèàïàçîí îò 0 äî 100');
               EXIT
             END;
         END;
@@ -49,29 +53,20 @@ BEGIN {AverageScore}
       TotalScore := TotalScore * 10;
       Ave := TotalScore DIV NumberOfScores;
       RESET(SecondName);
+      BEGIN
+        Student := Student + 1;
+        WHILE NOT EOLN(SecondName)
+        DO
+          BEGIN
+            READ(SecondName, Ch);
+            WRITE(OUTPUT, Ch);
+          END;
+      END;
       IF Ave MOD 10 >= 5
-      THEN
-        BEGIN 
-          Student := Student + 1;
-          WHILE NOT EOLN(SecondName)
-          DO
-            BEGIN
-              READ(SecondName, Ch);
-              WRITE(OUTPUT, Ch);
-            END;
-          WRITELN(Ave DIV 10 + 1)
-        END 
+      THEN    
+        WRITELN(Ave DIV 10 + 1)
       ELSE
-        BEGIN
-          Student := Student + 1;
-          WHILE NOT EOLN(SecondName)
-          DO
-            BEGIN
-              READ(SecondName, Ch);
-              WRITE(OUTPUT, Ch);
-            END;
-          WRITELN(Ave DIV 10);
-        END;
+        WRITELN(Ave DIV 10);
       ClassTotal := ClassTotal + TotalScore;
     END;
   WRITELN;
