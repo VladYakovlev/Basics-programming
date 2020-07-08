@@ -1,9 +1,9 @@
 PROGRAM PseudographicPrinting(INPUT, OUTPUT);
 CONST
   MinValueOfCoord = 1;
-  MaxValueOfCoord = 25;
-  MinSymbol = 'A';
-  MaxSymbol = 'Z';
+  RowSize = 5;
+  ColSize = 5;
+  MaxValueOfCoord = RowSize * ColSize;
 TYPE
   Sets = SET OF MinValueOfCoord .. MaxValueOfCoord;
 VAR
@@ -55,7 +55,7 @@ PROCEDURE PrintSymbolByCoord(VAR FOut: TEXT; VAR Symbol: CHAR);
             WRITE(FOut, '*')
           ELSE
             WRITE(FOut, ' ');
-          IF ((Indication MOD 5) = 0)
+          IF ((Indication MOD RowSize) = 0)
           THEN
             WRITELN(FOut)
         END
@@ -63,8 +63,13 @@ PROCEDURE PrintSymbolByCoord(VAR FOut: TEXT; VAR Symbol: CHAR);
       WRITE(FOut, 'This symbol is not in the typing set.')    
   END;    
 BEGIN
+  Symbol := ' ';
   IF NOT EOLN(INPUT)
   THEN
     READ(INPUT, Symbol);
-  PrintSymbolByCoord(Output, Symbol)
+  IF Symbol = ' '
+  THEN
+    WRITE('Empty INPUT')
+  ELSE
+    PrintSymbolByCoord(Output, Symbol)
 END.
