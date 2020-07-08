@@ -22,20 +22,24 @@ VAR
 BEGIN {Initialize}
   UsedChar := [];
   RESET(CodeTxt);
-  Error := FALSE; 
+  Error := FALSE;
   WHILE NOT EOF(CodeTxt) AND NOT Error 
   DO
     BEGIN
       IF NOT EOLN(CodeTxt)
       THEN
         BEGIN
-          WHILE NOT EOLN(CodeTxt)
-          DO
-            BEGIN
-              Ch1 := Ch2;
-              Ch2 := Ch3;
-              READ(CodeTxt, Ch3)
-            END; 
+          IF NOT EOLN(CodeTxt)
+          THEN
+            READ(CodeTxt, Ch1);
+          IF NOT EOLN(CodeTxt)
+          THEN
+            READ(CodeTxt, Ch2); 
+          IF NOT EOLN(CodeTxt)
+          THEN
+            READ(CodeTxt, Ch3)
+          ELSE
+            Error := TRUE;    
           IF (Ch1 IN SymbArea) AND (Ch2 = '=') AND NOT (Ch3 IN UsedChar) AND (Ch3 IN CodeArea)
           THEN
             BEGIN
@@ -56,7 +60,7 @@ BEGIN {Initialize}
                   Error := TRUE;
                   WRITELN('Error: Invalid data format.') 
                 END
-      END;     
+        END;     
       READLN(CodeTxt)
     END
 END; {Initialize}
